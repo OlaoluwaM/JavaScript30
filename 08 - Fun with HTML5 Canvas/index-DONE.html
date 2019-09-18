@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML5 Canvas</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: auto;
+    }
+
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="draw" width="100" height="100"></canvas>
+
+  <script>
+    const CANVAS = document.getElementById('draw');
+    const CTX = CANVAS.getContext('2d');
+
+    CANVAS.width = window.innerWidth
+    CANVAS.height = window.innerHeight;
+
+    CTX.strokeStyle = '#bada55';
+    CTX.lineJoin = 'round';
+    CTX.lineCap = 'round';
+    CTX.lineWidth = 60;
+    CTX.globalCompositeOperation = 'multiply';
+
+    let isDrawing = false,
+      lastX = 10,
+      lastY = 10;
+
+    let hue = 0;
+    let direction = true;
+
+    function drawOnCanvas(e) {
+      if (!isDrawing) return;
+      CTX.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+      CTX.beginPath();
+      // Start from
+      CTX.moveTo(lastX, lastY);
+      // Go to
+      CTX.lineTo(e.offsetX, e.offsetY);
+      CTX.stroke();
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+      hue++;
+      if (hue >= 360) hue = 0;
+      if (CTX.lineWidth >= 300 || CTX.lineWidth <= 1) direction = !direction;
+      if (direction) CTX.lineWidth++;
+      else CTX.lineWidth--;
+    }
+
+    CANVAS.addEventListener('mousemove', drawOnCanvas)
+    CANVAS.addEventListener('mousedown', (e) => {
+      isDrawing = true;
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+    CANVAS.addEventListener('mouseup', () => isDrawing = false)
+    CANVAS.addEventListener('mouseleave', () => isDrawing = false)
+  </script>
+</body>
+
+</html>

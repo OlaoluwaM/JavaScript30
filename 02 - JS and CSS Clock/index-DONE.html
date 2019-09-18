@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="main.css">
+  <title>JS + CSS Clock</title>
+</head>
+
+<body>
+  <div class="clock">
+    <div class="clock-face">
+      <div class="hand hour-hand"></div>
+      <div class="hand min-hand"></div>
+      <div class="hand second-hand"></div>
+    </div>
+  </div>
+
+  <script>
+    function setDate() {
+      const secondsHand = document.querySelector('.second-hand');
+      const minHand = document.querySelector('.min-hand');
+      const hourHand = document.querySelector('.hour-hand');
+
+      const now = new Date();
+
+
+      let seconds = now.getSeconds();
+      let minutes = now.getMinutes();
+      let hours = now.getHours();
+
+      const REMOVE_TRANSITION_FROM_SECONDS_HAND_FOR_SMOOTH_TICKING = () => {
+        if (secondsToDegrees === 0) {
+          document.querySelector('.second-hand').style.transition = 'none';
+          console.log('removed')
+          setTimeout(() => {
+            document.querySelector('.second-hand').style.transition = '';
+          }, 950);
+        }
+        return;
+      }
+
+
+      let secondsToDegrees = (((seconds) / 60) * 360);
+      let minutesToDegrees = (((minutes) / 60) * 360);
+      let hoursToDegrees = (((hours) / 12) * 360);
+
+      // For Smooth ticking
+      REMOVE_TRANSITION_FROM_SECONDS_HAND_FOR_SMOOTH_TICKING();
+
+      secondsHand.style.transform = `rotate(${secondsToDegrees}deg)`;
+      minHand.style.transform = `rotate(${minutesToDegrees}deg)`;
+      hourHand.style.transform = `rotate(${hoursToDegrees}deg)`;
+      console.log(seconds, minutes, hours)
+    }
+
+    setInterval(setDate, 1000);
+    setDate();
+  </script>
+</body>
+
+</html>

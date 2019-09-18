@@ -184,24 +184,20 @@
     </li>
   </ul>
   <script>
-    const timeNodes = Array.from(document.querySelectorAll('[data-time]'));
+    const videos = Array.from(document.querySelectorAll('.videos > li'));
+    const totalRunTimeInSeconds = videos.map(video => video.dataset.time.split(':')).map(item => {
+      let [mins, sec] = item;
+      return (parseFloat(mins) * 60) + parseFloat(sec)
+    }).reduce((total, currentValue) => total + currentValue);
 
-    const seconds = timeNodes
-      .map(node => node.dataset.time)
-      .map(timeCode => {
-        const [mins, secs] = timeCode.split(':').map(parseFloat);
-        return (mins * 60) + secs;
-      })
-      .reduce((total, vidSeconds) => total + vidSeconds);
+    function convertToTimeFormat(sec) {
+      const hours = Math.floor(sec / 3600);
+      const mins = Math.floor(sec % 3600 / 60);
+      const seconds = Math.floor(sec % 3600 % 60)
+      return `Total run time is: ${hours} hours ${mins} minutes, ${seconds} seconds`;
+    }
 
-    let secondsLeft = seconds;
-    const hours = Math.floor(secondsLeft / 3600);
-    secondsLeft = secondsLeft % 3600;
-
-    const mins = Math.floor(secondsLeft / 60);
-    secondsLeft = secondsLeft % 60;
-
-    console.log(hours, mins, secondsLeft);
+    console.log(convertToTimeFormat(totalRunTimeInSeconds))
   </script>
 </body>
 

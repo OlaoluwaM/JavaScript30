@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Key Detection</title>
+</head>
+
+<body>
+  <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+  <script>
+    const KEY_SEQUENCE = 'africa'
+    let pressedKeys = [];
+
+    window.addEventListener('keyup', (e) => {
+      pressedKeys.push(e.key)
+      pressedKeys.splice(-KEY_SEQUENCE.length - 1, pressedKeys.length - KEY_SEQUENCE.length);
+      if (pressedKeys.join('').includes(KEY_SEQUENCE)) {
+        cornify_add()
+      }
+    })
+  </script>
+</body>
+
+</html>

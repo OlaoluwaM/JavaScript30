@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speech Detection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="words" contenteditable>
+  </div>
+
+  <script>
+    const wordsDiv = document.querySelector('.words');
+    window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    navigator.mediaDevices.getUserMedia({
+      audio: true
+    }).then(localMediaStream => localMediaStream)
+
+    const speechRecognitionObj = new SpeechRecognition();
+    speechRecognitionObj.interimResults = true;
+
+    function generateParagraph() {
+      let paragraph = document.createElement('p');
+      wordsDiv.appendChild(paragraph);
+      return;
+    }
+    generateParagraph();
+
+
+    speechRecognitionObj.addEventListener('result', (e) => {
+      let resultObj = Array.from(e.results)[0]
+      const {
+        '0': obj,
+        isFinal: hasStoppedSpeaking
+      } = resultObj
+      const transcript = obj.transcript;
+      if (hasStoppedSpeaking) {
+        generateParagraph();
+        return
+      }
+      wordsDiv.lastElementChild.textContent = transcript;
+    })
+    speechRecognitionObj.addEventListener('end', speechRecognitionObj.start)
+    speechRecognitionObj.start();
+  </script>
+
+</body>
+
+</html>
